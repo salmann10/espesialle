@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selamat Hari Guru</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="h-full w-full flex items-center justify-center bg-gradient-to-br from-pink-200 via-pink-300 to-pink-400 overflow-hidden relative font-[Poppins]">
+
+<!-- FLOATING EMOJIS -->
+<div id="emojis" class="pointer-events-none absolute inset-0 z-10"></div>
+
+<!-- AUDIO -->
+<audio id="bgm" preload="auto">
+  <source src="pagiku-cerahku.mp3" type="audio/mpeg">
+</audio>
+
+<!-- CARD -->
+<div id="card" class="w-full max-w-lg bg-pink-50/40 backdrop-blur-xl rounded-3xl p-6 sm:p-10 text-center shadow-xl animate-fadeIn relative z-20 mx-4">
+
+  <h1 class="text-2xl sm:text-3xl font-bold mb-3">Hai Guru Teladan! 👋</h1>
+  <p class="text-base mb-6">Siap buat klik tombol next-next yang lucu? 😆</p>
+
+  <!-- BUTTON NGESSELIN -->
+  <button id="nextBtn"
+    onclick="nextStep()"
+    onmouseover="runButton()"
+    class="btn w-full py-3 bg-pink-300 text-pink-900 font-bold rounded-xl transition hover:scale-105 active:scale-95 relative">
+    Next ➜
+  </button>
+
+</div>
+
+<script>
+/* =======================
+      PAGE DATA
+======================= */
+const pages = [
+  { title: "Pertami tami...", text: "Matursembahnuwun sudah menjadi guru paling sabar 😁", btn: "Lanjut ➜" },
+  { title: "Dan juga...", text: "Selalu jadi panutan tanpa harus berusaha! ✨", btn: "Next Lagi ➜" },
+  { title: "Ett sabar dereng rampung...", text: "Guru teladan kok bisa selucu ini sih? 😂", btn: "Terusin ➜" },
+  { title: "Wait bentar...", text: "Udah capek belum klik tombolnya? 🤣", btn: "Dikit lagi ➜" },
+  { title: "Oke, yang terakhir ikii", text: "Siap masuk ke ucapan utama?", btn: "Gaskeun! 🚀" },
+  {
+    title: "Selamat Hari Guru! ❤️",
+    text: "Terima kasih telah menjadi guru paling teladan, penuh inspirasi, penuh kesabaran, dan selalu menghadirkan senyum di setiap proses belajar. Anda bukan hanya mengajar, tapi membentuk masa depan. 🥹✨",
+    img: "p.jpg",
+    btn: "Ulangi Lagi 🔄"
+  }
+];
+
+let current = 0;
+let musicStarted = false;
+
+/* =======================
+        NEXT STEP
+======================= */
+function nextStep() {
+  if (!musicStarted) {
+    document.getElementById("bgm").play();
+    musicStarted = true;
+  }
+
+  current++;
+  if (current >= pages.length) current = 0;
+
+  const c = pages[current];
+  const card = document.getElementById("card");
+
+  card.innerHTML = `
+      <h1 class="text-2xl font-semibold mb-3">${c.title}</h1>
+      ${c.img ? `<div class='w-full flex justify-center mb-4'><img src="${c.img}" class='max-w-xs w-full rounded-2xl shadow-xl border-4 border-pink-300 animate-pop-slow'></div>` : ''}
+      <p class="text-base mb-6">${c.text}</p>
+      <button onclick="nextStep()" class='w-full py-3 bg-pink-300 text-pink-900 font-bold rounded-xl transition hover:scale-105 active:scale-95'>${c.btn}</button>
+    `;
+
+  applyPop();
+}
+
+/* =======================
+      BUTTON LARI
+======================= */
+function runButton() {
+  const btn = document.getElementById("nextBtn");
+  btn.classList.add("animate-shake");
+
+  const x = Math.random() * 60 - 30; 
+  const y = Math.random() * 60 - 30;
+
+  btn.style.transform = `translate(${x}px, ${y}px)`;
+
+  setTimeout(() => {
+    btn.classList.remove("animate-shake");
+  }, 400);
+}
+
+/* =======================
+      FLOATING EMOJIS
+======================= */
+const emojiList = ["💖", "💕", "💗", "💞", "❤️", "💓", "💘", "💝"];
+
+function spawnEmojis() {
+  const emoji = document.createElement("div");
+  emoji.className = "absolute text-3xl animate-floatUp opacity-80";
+  emoji.innerText = emojiList[Math.floor(Math.random() * emojiList.length)];
+
+  emoji.style.left = Math.random() * 90 + "%";
+  emoji.style.top = "100%";
+
+  document.getElementById("emojis").appendChild(emoji);
+
+  setTimeout(() => emoji.remove(), 6000);
+}
+setInterval(spawnEmojis, 800);
+
+/* =======================
+        POP EFFECT
+======================= */
+function applyPop() {
+  const card = document.getElementById("card");
+  card.classList.remove("animate-pop");
+  void card.offsetWidth;
+  card.classList.add("animate-pop");
+}
+</script>
+
+<!-- =======================
+      EXTRA ANIMATIONS
+======================= -->
+<style>
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(0.8); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-120vh) scale(1.3); opacity: 0; }
+}
+.animate-floatUp { animation: floatUp 6s linear infinite; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px);} 
+  to { opacity: 1; transform: translateY(0);} 
+}
+.animate-fadeIn { animation: fadeIn 0.7s ease; }
+
+@keyframes popIn {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-pop { animation: popIn 0.4s ease-out; }
+
+@keyframes shake {
+  0%, 100% { transform: translate(0,0); }
+  25% { transform: translate(6px, -6px); }
+  50% { transform: translate(-6px, 6px); }
+  75% { transform: translate(6px, 6px); }
+}
+.animate-shake { animation: shake 0.3s; }
+
+@keyframes bounceSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-bounceSlow { animation: bounceSlow 3s infinite ease-in-out; }
+</style>
+
+</body>
+</html>
